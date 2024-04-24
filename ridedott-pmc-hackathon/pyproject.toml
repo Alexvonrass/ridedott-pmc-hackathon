@@ -21,3 +21,19 @@ diagrams = "^0.23.4"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.flake8]
+max-line-length = 79
+exclude = [".git", "*migrations*", ".idea", ".pytest_cache", ".tmp", ".venv", "venv"]
+ignore = ["E501", "W503"]
+extend-ignore = ["E203"]
+max-complexity = 15
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 79
+ensure_newline_before_comments = true
+
