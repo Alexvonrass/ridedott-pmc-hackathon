@@ -22,7 +22,7 @@ repos:
     rev: 5.0.1
     hooks:
       - id: flake8
-        args: [ --count, --show-source, --statistics, --config=pyproject.toml]
+        args: [ --count, --show-source, --statistics, "--config=pyproject.toml"]
 
 # The hook is yet to be added with ticket https://ridedott.atlassian.net/browse/DE-777.
 #  - repo: https://github.com/pre-commit/mirrors-mypy
