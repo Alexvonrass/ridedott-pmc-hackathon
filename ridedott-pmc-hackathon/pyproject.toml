@@ -36,4 +36,3 @@ force_grid_wrap = 0
 use_parentheses = true
 line_length = 79
 ensure_newline_before_comments = true
-
