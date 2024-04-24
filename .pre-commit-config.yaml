@@ -1,0 +1,38 @@
+# Note: when adding a new hook, run `pre-commit run --all-files`
+# to check it against all files in the repo and commit the changes it makes.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+#      - id: trailing-whitespace
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        args: [ --line-length=79 ]
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+  - repo: https://github.com/PyCQA/flake8
+    rev: 5.0.1
+    hooks:
+      - id: flake8
+        args: [ --count, --show-source, --statistics, --config=setup.cfg ]
+
+# The hook is yet to be added with ticket https://ridedott.atlassian.net/browse/DE-777.
+#  - repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: 'v0.902'
+#    hooks:
+#      - id: mypy
+#        args: [ --namespace-packages, --no-strict-optional, --ignore-missing-imports ]
+#        additional_dependencies: [tokenize-rt==3.2.0]
+
+
+default_language_version:
+    # force all unspecified python hooks to run python3
+    python: python3
