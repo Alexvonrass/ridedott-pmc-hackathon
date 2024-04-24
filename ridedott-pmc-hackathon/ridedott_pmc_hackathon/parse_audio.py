@@ -1,6 +1,7 @@
 from google.cloud.speech_v2 import SpeechClient
 from google.cloud.speech_v2.types import cloud_speech
 
+
 def audio_to_text(
     project_id: str,
     audio_file_path: str,

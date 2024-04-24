@@ -14,15 +14,10 @@
 import base64
 import json
 import os
-
 from itertools import islice
 
 import vertexai
-
-from google.cloud import bigquery
-from google.cloud import storage
-from google.cloud import vision
-
+from google.cloud import bigquery, storage, vision
 from vertexai.language_models import TextGenerationModel
 
 PROJECT_ID = os.getenv("GCP_PROJECT_ID")
@@ -32,7 +27,9 @@ BQ_DATASET = "articles"
 BQ_TABLE = "summaries"
 
 
-def extract_text_from_document(src_bucket: str, file_name: str, dst_bucket: str) -> str:
+def extract_text_from_document(
+    src_bucket: str, file_name: str, dst_bucket: str
+) -> str:
     """Extracts the contents of the PDF document and stores the results in a folder in GCS.
 
     In order to extract the contents of the PDF document OCR is applied and the results,
@@ -58,7 +55,9 @@ def extract_text_from_document(src_bucket: str, file_name: str, dst_bucket: str)
     feature = vision.Feature(type_=vision.Feature.Type.DOCUMENT_TEXT_DETECTION)
 
     gcs_source = vision.GcsSource(uri=src_uri)
-    input_config = vision.InputConfig(gcs_source=gcs_source, mime_type=mime_type)
+    input_config = vision.InputConfig(
+        gcs_source=gcs_source, mime_type=mime_type
+    )
 
     gcs_destination = vision.GcsDestination(uri=dst_uri)
     output_config = vision.OutputConfig(
@@ -66,7 +65,9 @@ def extract_text_from_document(src_bucket: str, file_name: str, dst_bucket: str)
     )
 
     async_request = vision.AsyncAnnotateFileRequest(
-        features=[feature], input_config=input_config, output_config=output_config
+        features=[feature],
+        input_config=input_config,
+        output_config=output_config,
     )
 
     operation = client.async_batch_annotate_files(requests=[async_request])
@@ -132,14 +133,18 @@ def extract_title_from_text(text: str) -> str:
     Returns:
         title of the PDF document
     """
-    vertexai.init(project=PROJECT_ID, location="us-central1")  # PaLM only available in us for now
+    vertexai.init(
+        project=PROJECT_ID, location="us-central1"
+    )  # PaLM only available in us for now
     model = TextGenerationModel.from_pretrained("text-bison")
     prompt = get_prompt_for_title_extraction()
 
     if not prompt:
         return ""  # return empty title for empty prompt
 
-    response = model.predict(prompt.format(pdf_text=text[:5000]))  # TODO Challenge 2, set placeholder values in format
+    response = model.predict(
+        prompt.format(pdf_text=text[:5000])
+    )  # TODO Challenge 2, set placeholder values in format
     return response.text
 
 
@@ -152,7 +157,9 @@ def extract_abstract_from_text(text: str) -> str:
     Returns:
         title of the PDF document
     """
-    vertexai.init(project=PROJECT_ID, location="us-central1")  # PaLM only available in us for now
+    vertexai.init(
+        project=PROJECT_ID, location="us-central1"
+    )  # PaLM only available in us for now
     model = TextGenerationModel.from_pretrained("text-bison")
     prompt = get_prompt_for_abstract_extraction()
 
@@ -194,7 +201,9 @@ def extract_summary_from_text(text: str, abstract: str) -> str:
     context = ""
     summaries = ""
     for page in pages(text, 16000):
-        prompt = get_prompt_for_page_summary_with_context(page, context, abstract)
+        prompt = get_prompt_for_page_summary_with_context(
+            page, context, abstract
+        )
         context = model.predict(prompt, max_output_tokens=256).text
         summaries += f"\n{context}"
 
@@ -202,7 +211,9 @@ def extract_summary_from_text(text: str, abstract: str) -> str:
     return model.predict(prompt, max_output_tokens=256).text
 
 
-def store_results_in_bq(dataset: str, table: str, columns: dict[str, str]) -> bool:
+def store_results_in_bq(
+    dataset: str, table: str, columns: dict[str, str]
+) -> bool:
     """Stores the results of title extraction and summary generation in BigQuery.
 
     Args:
@@ -235,7 +246,9 @@ def on_document_added(event, context):
         event: event payload
         context: metadata for the event.
     """
-    pubsub_message = json.loads(base64.b64decode(event["data"]).decode("utf-8"))
+    pubsub_message = json.loads(
+        base64.b64decode(event["data"]).decode("utf-8")
+    )
     src_bucket = pubsub_message["bucket"]
     src_fname = pubsub_message["name"]
     print("Processing file:", src_fname)
@@ -256,11 +269,18 @@ def on_document_added(event, context):
     summary = extract_summary_from_text(complete_text, abstract)
     print("Summary:", summary)
 
-    columns = {"uri": f"gs://{src_bucket}/{src_fname}", "name": src_fname, "title": title, "summary": summary}
-    store_results_in_bq(dataset='articles', table='summaries', columns=columns)
+    columns = {
+        "uri": f"gs://{src_bucket}/{src_fname}",
+        "name": src_fname,
+        "title": title,
+        "summary": summary,
+    }
+    store_results_in_bq(dataset="articles", table="summaries", columns=columns)
 
 
-def get_prompt_for_page_summary_with_context(page_text: str, context: str, abstract: str) -> str:
+def get_prompt_for_page_summary_with_context(
+    page_text: str, context: str, abstract: str
+) -> str:
     prompt_string = f"""
     Below is the content of a page of a PDF document, the summary of the previous page and the abstract of the paper.
     Your task is to give me a concise summary of this page. Return only the summary, nothing else.

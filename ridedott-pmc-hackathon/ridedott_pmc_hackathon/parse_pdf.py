@@ -1,12 +1,11 @@
-from google.cloud import vision
-from google.cloud import storage
 import json
 import re
+
+from google.cloud import storage, vision
 
 
 def async_detect_document(gcs_source_uri, gcs_destination_uri):
     """OCR with PDF/TIFF as source files on GCS"""
-
 
     # Supported mime_types are: 'application/pdf' and 'image/tiff'
     mime_type = "application/pdf"
@@ -19,7 +18,9 @@ def async_detect_document(gcs_source_uri, gcs_destination_uri):
     feature = vision.Feature(type_=vision.Feature.Type.DOCUMENT_TEXT_DETECTION)
 
     gcs_source = vision.GcsSource(uri=gcs_source_uri)
-    input_config = vision.InputConfig(gcs_source=gcs_source, mime_type=mime_type)
+    input_config = vision.InputConfig(
+        gcs_source=gcs_source, mime_type=mime_type
+    )
 
     gcs_destination = vision.GcsDestination(uri=gcs_destination_uri)
     output_config = vision.OutputConfig(
@@ -27,7 +28,9 @@ def async_detect_document(gcs_source_uri, gcs_destination_uri):
     )
 
     async_request = vision.AsyncAnnotateFileRequest(
-        features=[feature], input_config=input_config, output_config=output_config
+        features=[feature],
+        input_config=input_config,
+        output_config=output_config,
     )
 
     operation = client.async_batch_annotate_files(requests=[async_request])
