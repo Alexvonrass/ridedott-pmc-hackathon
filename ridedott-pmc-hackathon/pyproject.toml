@@ -6,7 +6,7 @@ authors = ["Alexvonrass <alexvonrass@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.12"
 pandas = "^2.2.2"
 vertexai = "^1.48.0"
 weaviate-client = "^4.5.6"
@@ -16,6 +16,11 @@ google-cloud-speech = "^2.26.0"
 pytest = "^8.1.1"
 pre-commit = "^3.7.0"
 diagrams = "^0.23.4"
+dash = "^2.16.1"
+dash-bootstrap-components = "^1.6.0"
+dash-core-components = "^2.0.0"
+dash-recording-components = "^1.0.3"
+soundfile = "^0.12.1"
 
 
 [build-system]
