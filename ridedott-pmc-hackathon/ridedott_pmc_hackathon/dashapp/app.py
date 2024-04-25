@@ -30,22 +30,22 @@ app.layout = html.Div(
             value="unknown",
             clearable=False,
         ),
-        html.Div(            [
-                
-                html.Div([
-                            html.P("This is another Div containing a paragraph."),
-                            html.P("Another paragraph for demonstration."),
-                            html.P("Another paragraph for demonstration.")
-                        ]),
-                ## below interval block updates every second with new text info
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.P("This is another Div containing a paragraph."),
+                        html.P("Another paragraph for demonstration."),
+                        html.P("Another paragraph for demonstration."),
+                    ]
+                ),
                 dcc.Interval(
-                id='interval-component',
-                interval=1*1000, # in milliseconds
-                n_intervals=0
-        )
+                    id="interval-component",
+                    interval=1 * 1000,  # in milliseconds
+                    n_intervals=0,
+                ),
             ],
             id="chat-window",
-
             style={
                 "border": "1px solid #ccc",
                 "width": "80%",
@@ -54,7 +54,6 @@ app.layout = html.Div(
                 "padding": "10px",
                 "overflow-y": "auto",
             },
-
         ),
         html.Button("Record Audio", id="record-button", n_clicks=0),
         html.Button("Stop Recording", id="stop-button", n_clicks=0),
@@ -63,7 +62,7 @@ app.layout = html.Div(
         AudioRecorder(id="audio-recorder"),
         html.Div(
             id="dummy-output", style={"display": "none"}
-        ),  # Dummy output to handle state updates invisibly
+        ),  # Dummy output for state updates
     ]
 )
 
@@ -117,5 +116,19 @@ def play_audio(play_clicks):
     return "No audio recorded."
 
 
+@app.callback(
+    Output("chat-window", "children"),
+    Input("stop-button", "n_clicks"),
+    State("chat-window", "children"),
+    prevent_initial_call=True,
+)
+def update_chat_window(n_clicks, children):
+    if n_clicks > 0:
+        new_paragraph = html.P("test text")
+        updated_children = children + [new_paragraph]
+        return updated_children
+    return children
+
+
 if __name__ == "__main__":
-    app.run_server(debug=True, )
+    app.run_server(debug=True)
