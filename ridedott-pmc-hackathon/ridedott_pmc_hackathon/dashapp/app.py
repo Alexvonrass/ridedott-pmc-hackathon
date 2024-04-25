@@ -30,8 +30,22 @@ app.layout = html.Div(
             value="unknown",
             clearable=False,
         ),
-        html.Div(
+        html.Div(            [
+                
+                html.Div([
+                            html.P("This is another Div containing a paragraph."),
+                            html.P("Another paragraph for demonstration."),
+                            html.P("Another paragraph for demonstration.")
+                        ]),
+                ## below interval block updates every second with new text info
+                dcc.Interval(
+                id='interval-component',
+                interval=1*1000, # in milliseconds
+                n_intervals=0
+        )
+            ],
             id="chat-window",
+
             style={
                 "border": "1px solid #ccc",
                 "width": "80%",
@@ -40,6 +54,7 @@ app.layout = html.Div(
                 "padding": "10px",
                 "overflow-y": "auto",
             },
+
         ),
         html.Button("Record Audio", id="record-button", n_clicks=0),
         html.Button("Stop Recording", id="stop-button", n_clicks=0),
@@ -103,4 +118,4 @@ def play_audio(play_clicks):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, )
