@@ -36,7 +36,7 @@ def audio_to_text(
     request = cloud_speech.RecognizeRequest(
         recognizer=f"projects/{project_id}/locations/global/recognizers/_",
         config=config,
-        content=audio,
+        content=audio_file,
     )
 
     # Transcribes the audio into text
