@@ -79,9 +79,9 @@ def control_recording(record_clicks, stop_clicks, recording):
 def update_audio(audio):
     global audio_samples
     if audio is not None:
-        audio_samples.extend(
-            audio["samples"]
-        )  # Ensure correct key for the audio samples
+        # Convert dictionary values to a list of samples
+        current_samples = list(audio.values())
+        audio_samples.extend(current_samples)
     return ""
 
 
