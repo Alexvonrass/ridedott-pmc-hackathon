@@ -45,7 +45,7 @@ def audio_to_text(
     for result in response.results:
         print(f"Transcript: {result.alternatives[0].transcript}")
 
-    return response
+    return response.results[0].alternatives[0].transcript
 
 
 if __name__ == "__main__":
