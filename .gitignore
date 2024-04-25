@@ -1,0 +1,5 @@
+# .gitignore add here
+
+*.pyc
+*.ipynb_checkpoints
+sa.json
