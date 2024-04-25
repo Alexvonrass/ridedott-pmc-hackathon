@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 language_dict = {
-{
     "af-ZA": "Afrikaans (South Africa)",
     "sq-AL": "Albanian (Albania)",
     "am-ET": "Amharic (Ethiopia)",
@@ -116,9 +115,9 @@ language_dict = {
     "es-419": "Spanish (Latin American)",
     "sw-KE": "Swahili (Kenya)",
     "umb-AO": "Umbundu (Angola)",
-    "xh-ZA": "Xhosa (South Africa)"
+    "xh-ZA": "Xhosa (South Africa)",
 }
-}
+
 
 language_dropdown_options = [
     {"label": label, "value": value} for value, label in language_dict.items()
