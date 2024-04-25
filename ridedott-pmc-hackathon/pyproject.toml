@@ -21,6 +21,7 @@ dash-bootstrap-components = "^1.6.0"
 dash-core-components = "^2.0.0"
 dash-recording-components = "^1.0.3"
 soundfile = "^0.12.1"
+python-dotenv = "^1.0.1"
 
 
 [build-system]

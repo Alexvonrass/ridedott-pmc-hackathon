@@ -18,16 +18,18 @@ credentials = service_account.Credentials.from_service_account_file(
 
 def audio_to_text(
     project_id: str,
-    audio: str,
+    audio_file: str,
+    language_code: str,
 ) -> cloud_speech.RecognizeResponse:
     """Transcribe an audio file."""
     # Instantiates a client
+
     client = SpeechClient(credentials=credentials)
 
     config = cloud_speech.RecognitionConfig(
         auto_decoding_config=cloud_speech.AutoDetectDecodingConfig(),
         # Language codes is optional
-        language_codes=["nl-NL"],
+        language_codes=[language_code],
         model="long",
     )
 
@@ -40,7 +42,6 @@ def audio_to_text(
     # Transcribes the audio into text
     response = client.recognize(request=request)
     # language = response.results
-    print(response)
     for result in response.results:
         print(f"Transcript: {result.alternatives[0].transcript}")
 
@@ -50,6 +51,6 @@ def audio_to_text(
 if __name__ == "__main__":
     # Reads a file as bytes
     input_dir = Path(__file__).resolve().parents[1] / "input_data"
-    with open(input_dir / "audio" / "AUDIO4.m4a", "rb") as f:
+    with open(input_dir / "audio" / "download.wav", "rb") as f:
         audio = f.read()
-    audio_to_text("qwiklabs-gcp-02-08a8c713b151", audio)
+    audio_to_text("qwiklabs-gcp-02-08a8c713b151", audio, language_code="en-GB")

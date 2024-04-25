@@ -7,6 +7,11 @@ from google.api_core.client_options import ClientOptions
 from google.oauth2 import service_account
 from vertexai.preview.generative_models import GenerativeModel, Image
 
+
+def answer_question_with_context(question: str):
+    vertexai.init(project=PROJECT_ID, location=REGION, credentials=credentials)
+
+
 if __name__ == "__main__":
     PROJECT_ID = "qwiklabs-gcp-02-08a8c713b151"
     REGION = "europe-west4"
