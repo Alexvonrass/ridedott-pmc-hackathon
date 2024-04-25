@@ -1,16 +1,14 @@
+from pathlib import Path
+
+import vertexai
 from google.cloud.speech_v2 import SpeechClient
 from google.cloud.speech_v2.types import cloud_speech
-from pathlib import Path
 from google.oauth2 import service_account
-import vertexai
-
 from vertexai.preview.generative_models import GenerativeModel, Image
 
-SERVICE_ACCOUNT_FILE = (
-        Path(__file__).resolve().parents[1] / "sa" / "sa.json"
-    )
+SERVICE_ACCOUNT_FILE = Path(__file__).resolve().parents[1] / "sa" / "sa.json"
 
-    # Authenticate using the service account key file
+# Authenticate using the service account key file
 credentials = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE,
     scopes=["https://www.googleapis.com/auth/cloud-platform"],
@@ -20,16 +18,16 @@ print(credentials)
 
 def audio_to_text(
     project_id: str,
-    #audio_file_path: str,
+    # audio_file_path: str,
 ) -> cloud_speech.RecognizeResponse:
     """Transcribe an audio file."""
     # Instantiates a client
     client = SpeechClient()
 
     # Reads a file as bytes
-    with open(input_dir
-        /"audio"
-        / "AUDIO-2024-04-19-18-06-03.mp3", "rb") as f:
+    with open(
+        input_dir / "audio" / "AUDIO-2024-04-19-18-06-03.mp3", "rb"
+    ) as f:
         content = f.read()
 
     config = cloud_speech.RecognitionConfig(
@@ -47,13 +45,14 @@ def audio_to_text(
 
     # Transcribes the audio into text
     response = client.recognize(request=request)
-    #language = response.results
+    # language = response.results
     print(response)
     for result in response.results:
         print(f"Transcript: {result.alternatives[0].transcript}")
 
     return response
 
+
 if __name__ == "__main__":
     input_dir = Path(__file__).resolve().parents[1] / "input_data"
-    audio_to_text('qwiklabs-gcp-02-08a8c713b151')
+    audio_to_text("qwiklabs-gcp-02-08a8c713b151")
