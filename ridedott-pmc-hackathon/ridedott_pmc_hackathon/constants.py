@@ -115,7 +115,7 @@ language_dict = {
     "es-419": "Spanish (Latin American)",
     "sw-KE": "Swahili (Kenya)",
     "umb-AO": "Umbundu (Angola)",
-    "xh-ZA": "Xhosa (South Africa)",
+    "xh-ZA": "Xhosa (South Africa)"
 }
 
 
