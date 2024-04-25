@@ -22,7 +22,7 @@ def audio_to_text(
 ) -> cloud_speech.RecognizeResponse:
     """Transcribe an audio file."""
     # Instantiates a client
-    client = SpeechClient()
+    client = SpeechClient(credentials=credentials)
 
     # Reads a file as bytes
     with open(
@@ -33,7 +33,7 @@ def audio_to_text(
     config = cloud_speech.RecognitionConfig(
         auto_decoding_config=cloud_speech.AutoDetectDecodingConfig(),
         # Language codes is optional
-        # language_codes=["nl-NL", "ar-MA", "en-US", "tr-TR", "uk-UA"],
+        language_codes=["nl-NL"],
         model="long",
     )
 
